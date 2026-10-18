@@ -1,0 +1,47 @@
+{
+  "name": "taha-shop-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "npm@11.13.0",
+  "workspaces": [
+    "apps/web",
+    "apps/mobile",
+    "backend",
+    "packages/core"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "build:web": "npm run build --workspace=@taha-shop/core && npm run build --workspace=@taha-shop/web",
+    "pages:build": "npm run build --workspace=@taha-shop/core && npm run pages:build --workspace=@taha-shop/web && node scripts/verify-pages-output.mjs",
+    "pages:preview": "npm run pages:preview --workspace=@taha-shop/web",
+    "pages:deploy": "npm run pages:deploy --workspace=@taha-shop/web",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "dev:backend": "npm run dev --workspace=@taha-shop/backend",
+    "dev:web": "npm run dev --workspace=@taha-shop/web",
+    "dev:web:reset": "npm run dev:reset --workspace=@taha-shop/web",
+    "dev:web:fresh": "npm run dev:fresh --workspace=@taha-shop/web",
+    "clean-build": "node scripts/clean-build.mjs",
+    "compilation-flush": "node scripts/clean-build.mjs",
+    "dev:web:clean": "npm run compilation-flush && npm run dev:web:fast",
+    "dev:web:fast": "npm run dev --workspace=@taha-shop/web",
+    "dev:mobile": "npm run start --workspace=@taha-shop/mobile",
+    "dev:local": "concurrently -k -n api,web,mobile -c blue,green,magenta \"npm run dev:backend\" \"npm run dev:web\" \"npm run dev:mobile\"",
+    "dev:phone": "concurrently -k -n api,mobile -c blue,magenta \"npm run dev:backend\" \"npm run dev:mobile\"",
+    "lan:ip": "node scripts/show-lan-ip.mjs",
+    "backend:dev": "npm run dev:backend",
+    "web:dev": "npm run dev:web",
+    "mobile:start": "npm run dev:mobile",
+    "dev:stack": "node scripts/dev-stack.mjs",
+    "ports": "node -e \"const c=require('./packages/core/src/config.js'); console.log(JSON.stringify(c.PORTS,null,2))\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.4",
+    "turbo": "^2.3.3",
+    "typescript": "~5.8.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
